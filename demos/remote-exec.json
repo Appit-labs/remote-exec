@@ -1,0 +1,29 @@
+{
+  "skill": "remote-exec",
+  "out": "remote-exec/demo.gif",
+  "caption": "remote-exec \u2014 SSH that cannot hang",
+  "steps": [
+    {
+      "cmd": "rx.py add staging deploy@192.0.2.10",
+      "phase": "setup",
+      "out": [
+        "added staging -> deploy@192.0.2.10"
+      ]
+    },
+    {
+      "cmd": "rx.py ls",
+      "phase": "setup",
+      "out": [
+        "staging          deploy@192.0.2.10"
+      ]
+    },
+    {
+      "cmd": "rx.py probe staging --timeout 8",
+      "phase": "payoff",
+      "out": [
+        "timed out after 8s: uptime | sed 's/^ *//'",
+        "(no password prompt, no blocked session \u2014 exit 124)"
+      ]
+    }
+  ]
+}

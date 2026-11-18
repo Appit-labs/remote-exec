@@ -1,0 +1,27 @@
+{
+  "name": "remote-exec",
+  "version": "0.1.0",
+  "description": "One-shot SSH for agents: aliased hosts, hard timeouts, no password-prompt hangs, one-call health probe, file put/get.",
+  "license": "MIT",
+  "keywords": [
+    "agent-skill",
+    "pi-package",
+    "claude-code-plugin",
+    "codex-skill"
+  ],
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  },
+  "files": [
+    "skills",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ibrahimbdr/remote-exec.git"
+  }
+}

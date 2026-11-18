@@ -1,0 +1,12 @@
+{
+  "name": "remote-exec",
+  "version": "0.1.0",
+  "description": "One-shot SSH for agents: aliased hosts, hard timeouts, no password-prompt hangs, one-call health probe, file put/get.",
+  "author": {
+    "name": "Ibrahim M. Badr",
+    "url": "https://github.com/ibrahimbdr"
+  },
+  "homepage": "https://github.com/ibrahimbdr/remote-exec",
+  "license": "MIT",
+  "skills": "./skills"
+}
