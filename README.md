@@ -1,24 +1,36 @@
 # remote-exec
 
-<h3 align="center">SSH from an agent that cannot hang on a password prompt.</h3>
+<h3 align="center">Run one command on a remote server without hanging on a prompt.</h3>
 
 <p align="center">
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-3DA639?style=flat-square"></a>
   <img alt="agents" src="https://img.shields.io/badge/works%20in-pi%20%7C%20Claude%20Code%20%7C%20Codex%20%7C%20Cursor-4B5563?style=flat-square">
   <img alt="skillspector" src="https://img.shields.io/badge/SkillSpector-0%2F100%20SAFE-2EA043?style=flat-square">
-  <img alt="tokens" src="https://img.shields.io/badge/session%20cost-~80%20tok-6E7681?style=flat-square">
+  <img alt="cost" src="https://img.shields.io/badge/session%20cost-~80%20tok-6E7681?style=flat-square">
 </p>
 
 <p align="center">
-  <img alt="remote-exec demo" src="skills/remote-exec/assets/demo.gif" width="820">
+  <img alt="remote-exec demo — real run, regenerable from demos/remote-exec.json" src="skills/remote-exec/assets/demo.gif" width="900">
 </p>
+
+## What it is
+
+`remote-exec` is **one-shot SSH with guard rails**: registered hosts, hard timeouts, no
+interactive prompts, a single-call health probe (uptime, disks over 70%, memory, containers, GPU,
+listening ports) and file put/get. Every call either returns an answer or fails inside the timeout you
+set.
+
+## The problem it removes
+
+SSH from an agent fails in three predictable ways: it blocks forever on a password prompt, it
+mangles the remote quoting, or it starts something long-lived and never returns. That is why sessions end
+up hand-writing `ssh -o BatchMode=yes -o ConnectTimeout=… 'bash -lc …'` **825 times**. Here the flags are
+fixed, hosts are aliases, and the timeout is a parameter.
 
 ## Install
 
-One command for each agent — the skill is plain Markdown plus a script, so nothing is coupled to one ecosystem.
-
 ```bash
-# Claude Code (plugin, stays updatable)
+# Claude Code — the whole collection as one marketplace
 claude plugin marketplace add Appit-labs/appit-skills
 claude plugin install remote-exec@appit-skills
 
@@ -30,50 +42,45 @@ git clone git@github.com:Appit-labs/remote-exec.git
 cp -r remote-exec/skills/remote-exec ~/.claude/skills/      # or ~/.codex/skills/, .cursor/skills/, …
 ```
 
-## Why this exists
-
-Agent SSH fails in three predictable ways: it blocks on a prompt, it mangles quoting, or it starts something long-lived and never returns. This removes all three, and replaces five round trips with one `probe`.
-
 ## Use
 
-- Register a host: `scripts/rx.py add stage deploy@10.0.0.5:2222`
-- Health in one call: `scripts/rx.py probe stage` — uptime, >70% disks, memory, containers, GPU, ports`
-- Run / logs / copy: `run` · `logs` · `put` · `get`, all with `--timeout`
+- **Register a host** — `scripts/rx.py add staging deploy@10.0.0.5 --key /path/to/key`
+- **Health in one call** — `scripts/rx.py probe staging`
+- **Run / logs / copy** — `run` · `logs` · `put` · `get`, each with `--timeout`
+- **See what is registered** — `scripts/rx.py ls`
+
+## What it does not do
+
+- Password authentication is not supported, on purpose — use a key (`ssh-copy-id`).
+- It does not run interactive programs (`vim`, `top`, `psql` without `-c`); long jobs go to a log you poll.
 
 ## Requires
 
-- `ssh` client and key-based auth (password auth cannot work, by design).
-- Optional hosts file via `rx.py add`, mode 600, outside any repo.
+- `ssh` client and key-based auth to the target.
+- Optional hosts file at `~/.config/rx/hosts.json` (mode 600, outside any repo).
 - Python 3.9+ (stdlib only).
-
-## What you get
-
-- BatchMode + ConnectTimeout: a dead host fails in ~8 s instead of blocking the session.
-- `probe` deliberately ignores `/snap` mounts so disk pressure is signal, not noise.
-- Destructive remote commands are documented as require-explicit-go-ahead.
 
 ## Cost
 
 | | tokens |
 | --- | --- |
-| always-on (the description, every session) | ~80 |
+| always-on — the description, paid every session | ~80 |
 | on invoke | ~0.9k |
 
-The demo above is regenerated from a real run: `demos/remote-exec.json` holds the captured
-output, `tools/make_demo.py` renders it. No invented screenshots.
+The demo above is not a mockup: `demos/remote-exec.json` holds the captured run and
+`tools/make_demo.py` renders it, so it can be regenerated and audited.
 
 ## Security
 
-Static analysis with SkillSpector: **0/100, SAFE, 0 open findings** against the committed
-baseline. Every accepted finding is listed with its reason in [SECURITY.md](SECURITY.md).
-The skill never uses `shell=True`, never reads or stores a credential, and never chooses a
-network destination at runtime.
+SkillSpector: **0/100, SAFE, 0 open findings** against the committed baseline. Every accepted
+finding is listed with its reason in [SECURITY.md](SECURITY.md). No `shell=True`, no credential
+storage, no network destination chosen at runtime.
 
 ## Part of the Appit collection
 
-Browser QA · CI triage · Postgres · runbooks · SSH · Trello · cloud browsers · OpenDesign · Blender —
-one marketplace: [appit-skills](https://github.com/Appit-labs/appit-skills).
+[appit-skills](https://github.com/Appit-labs/appit-skills) — browser QA · CI triage · Postgres · runbooks ·
+SSH · Trello · cloud browsers · OpenDesign · Blender.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT, copyright Appit Labs. See [LICENSE](LICENSE).

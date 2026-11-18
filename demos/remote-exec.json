@@ -1,28 +1,41 @@
 {
   "skill": "remote-exec",
-  "out": "remote-exec/demo.gif",
-  "caption": "remote-exec \u2014 SSH that cannot hang",
+  "prompt": "you@laptop:~/infra",
   "steps": [
     {
-      "cmd": "rx.py add staging deploy@192.0.2.10",
-      "phase": "setup",
+      "cmd": "rx.py add staging deploy@10.0.0.5 --key ~/.ssh/id_ed25519",
+      "phase": "setup once",
+      "note": "hosts live in ~/.config/rx/hosts.json, mode 600 \u2014 never in a repo",
       "out": [
-        "added staging -> deploy@192.0.2.10"
+        "added staging -> deploy@10.0.0.5"
       ]
     },
     {
-      "cmd": "rx.py ls",
-      "phase": "setup",
+      "cmd": "rx.py probe staging",
+      "phase": "one call",
+      "note": "host, disk pressure, memory, containers, GPU, ports \u2014 instead of five round trips",
       "out": [
-        "staging          deploy@192.0.2.10"
+        "== host",
+        "staging-01",
+        "09:53:57 up 12 days, 21:01,  0 users,  load average: 0.51, 1.17, 0.66",
+        "== disk",
+        "Mounted on          Size  Used Use%",
+        "== mem",
+        "              total        used        free      shared  buff/cache   available",
+        "Mem:           31Gi        17Gi       1.0Gi       596Mi        12Gi        12Gi",
+        "== docker",
+        "app\tUp 3 minutes (healthy)",
+        "worker\tUp 7 days (healthy)",
+        "gpu-worker\tUp 2 weeks"
       ]
     },
     {
-      "cmd": "rx.py probe staging --timeout 8",
-      "phase": "payoff",
+      "cmd": "rx.py run staging \"systemctl is-active api\" --timeout 8",
+      "phase": "the guarantee",
+      "note": "a dead host costs 8 seconds; a password prompt cannot hang the session",
       "out": [
-        "timed out after 8s: uptime | sed 's/^ *//'",
-        "(no password prompt, no blocked session \u2014 exit 124)"
+        "timed out after 8s: systemctl is-active api",
+        "exit 124"
       ]
     }
   ]
