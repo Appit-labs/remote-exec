@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "One-shot SSH for agents: aliased hosts, hard timeouts, no password-prompt hangs, one-call health probe, file put/get.",
   "author": {
-    "name": "Appit Labs",
-    "url": "https://github.com/Appit-labs"
+    "name": "Ibrahim M. Badr",
+    "url": "https://github.com/ibrahimbdr"
   },
   "homepage": "https://github.com/Appit-labs/remote-exec",
   "license": "MIT",

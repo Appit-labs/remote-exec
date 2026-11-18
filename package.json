@@ -25,7 +25,13 @@
     "url": "https://github.com/Appit-labs/remote-exec.git"
   },
   "author": {
-    "name": "Appit Labs",
-    "url": "https://github.com/Appit-labs"
-  }
+    "name": "Ibrahim M. Badr",
+    "url": "https://github.com/ibrahimbdr"
+  },
+  "contributors": [
+    {
+      "name": "Appit Labs",
+      "url": "https://github.com/Appit-Labs"
+    }
+  ]
 }
