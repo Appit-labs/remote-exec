@@ -46,6 +46,9 @@ git clone git@github.com:Appit-labs/remote-exec.git
 cp -r remote-exec/skills/remote-exec ~/.claude/skills/      # or ~/.codex/skills/, .cursor/skills/, …
 ```
 
+> **npm name.** `remote-exec` on npm is an unrelated package by another author. The one published from this repository is
+> `@appitlabs/remote-exec` — `npm i @appitlabs/remote-exec`.
+
 ## Use
 
 - **Register a host** — `scripts/rx.py add staging deploy@10.0.0.5 --key /path/to/key`
