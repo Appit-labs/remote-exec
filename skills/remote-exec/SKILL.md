@@ -10,6 +10,7 @@ permissions:
   - env
   - file_read
   - file_write
+license: MIT
 ---
 
 # Remote exec
@@ -21,6 +22,8 @@ something long-lived and the call never returns. This wrapper removes all three.
 ```
 python3 "$SKILL_DIR/scripts/rx.py" <command>
 ```
+
+**Not for:** provisioning a box, managing users or installing agents — it assumes the host exists and you already have an alias. Anything that must survive your session belongs in systemd, not in this wrapper.
 
 ## Portability
 
